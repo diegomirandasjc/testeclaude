@@ -1,0 +1,58 @@
+# ---- BACK-END (C# / .NET) ----
+# Bin e obj (arquivos compilados)
+bin/
+obj/
+
+# Configurações do Visual Studio, Rider e VSCode
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs e Debug
+logs/
+*.log
+debug.log
+
+# Arquivos do NuGet
+*.nupkg
+packages/
+project.lock.json
+.nuget/
+
+# Configurações do sistema
+Thumbs.db
+*.DS_Store
+
+# Dados sensíveis e segredos de ambiente
+secrets.json
+appsettings.Development.json
+
+# ---- FRONT-END (React) ----
+# Dependências do Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Builds e cache
+build/
+dist/
+.cache/
+*.gz
+
+# Arquivos do editor
+.eslintcache
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ---- GERAL ----
+# Arquivos do sistema operacional
+*.swp
+*.swo
+
