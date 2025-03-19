@@ -27,6 +27,11 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
             entity.Property(e => e.CreatedAt).IsRequired();
+            
+            entity.HasOne(e => e.Mayor)
+                .WithMany()
+                .HasForeignKey(e => e.MayorId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         builder.Entity<Person>(entity =>

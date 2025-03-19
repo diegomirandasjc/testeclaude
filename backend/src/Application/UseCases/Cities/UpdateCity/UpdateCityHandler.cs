@@ -37,16 +37,18 @@ public class UpdateCityHandler : IRequestHandler<UpdateCityCommand, UpdateCityRe
         }
 
         city.Name = request.Name;
+        city.MayorId = request.MayorId;
         city.UpdatedAt = DateTime.UtcNow;
 
-        await _cityRepository.UpdateAsync(city, cancellationToken);
+        var updatedCity = await _cityRepository.UpdateAsync(city, cancellationToken);
 
         return new UpdateCityResponse
         {
-            Id = city.Id,
-            Name = city.Name,
-            CreatedAt = city.CreatedAt,
-            UpdatedAt = city.UpdatedAt
+            Id = updatedCity.Id,
+            Name = updatedCity.Name,
+            MayorId = updatedCity.MayorId,
+            MayorName = updatedCity.Mayor?.Name,
+            CreatedAt = updatedCity.CreatedAt 
         };
     }
 } 

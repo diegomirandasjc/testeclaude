@@ -26,8 +26,10 @@ const CityForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [persons, setPersons] = useState([]);
   const [formData, setFormData] = useState({
-    name: ""
+    name: "",
+    mayorId: ""
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -38,7 +40,8 @@ const CityForm = () => {
       setLoading(true);
       const response = await api.get(`/api/cities/${id}`);
       setFormData({
-        name: response.data.name
+        name: response.data.name,
+        mayorId: response.data.mayorId || ""
       });
     } catch (err) {
       console.error("Erro ao carregar cidade:", err);
@@ -48,7 +51,20 @@ const CityForm = () => {
     }
   };
 
+  const loadPersons = async () => {
+    try {
+      const response = await api.get("/api/persons");
+      if (response.data?.items) {
+        setPersons(response.data.items);
+      }
+    } catch (err) {
+      console.error("Erro ao carregar pessoas:", err);
+      setError("Erro ao carregar pessoas");
+    }
+  };
+
   useEffect(() => {
+    loadPersons();
     if (isEditing) {
       loadCity();
     }
@@ -143,6 +159,32 @@ const CityForm = () => {
                         {formErrors.Name && (
                           <div className="invalid-feedback d-block">
                             {formErrors.Name.join(", ")}
+                          </div>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="mayorId">Prefeito</Label>
+                        <Input
+                          type="select"
+                          id="mayorId"
+                          name="mayorId"
+                          value={formData.mayorId}
+                          onChange={handleInputChange}
+                          invalid={!!formErrors.MayorId}
+                          disabled={isViewMode}
+                        >
+                          <option value="">Selecione um prefeito</option>
+                          {persons.map((person) => (
+                            <option key={person.id} value={person.id}>
+                              {person.name}
+                            </option>
+                          ))}
+                        </Input>
+                        {formErrors.MayorId && (
+                          <div className="invalid-feedback d-block">
+                            {formErrors.MayorId.join(", ")}
                           </div>
                         )}
                       </FormGroup>

@@ -24,6 +24,8 @@ public class GetCityHandler : IRequestHandler<GetCityQuery, GetCityResponse>
         {
             Id = city.Id,
             Name = city.Name,
+            MayorId = city.MayorId,
+            MayorName = city.Mayor?.Name,
             CreatedAt = city.CreatedAt
         };
     }

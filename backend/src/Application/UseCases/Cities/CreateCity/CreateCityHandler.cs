@@ -35,6 +35,7 @@ public class CreateCityHandler : IRequestHandler<CreateCityCommand, CreateCityRe
         var city = new City
         {
             Name = request.Name,
+            MayorId = request.MayorId,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -44,6 +45,8 @@ public class CreateCityHandler : IRequestHandler<CreateCityCommand, CreateCityRe
         {
             Id = createdCity.Id,
             Name = createdCity.Name,
+            MayorId = createdCity.MayorId,
+            MayorName = createdCity.Mayor?.Name,
             CreatedAt = createdCity.CreatedAt
         };
     }

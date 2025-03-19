@@ -207,6 +207,7 @@ const Cities = () => {
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">Nome</th>
+                      <th scope="col">Prefeito</th>
                       <th scope="col">Data de Cadastro</th>
                       <th scope="col">Ações</th>
                     </tr>
@@ -214,7 +215,7 @@ const Cities = () => {
                   <tbody>
                     {loading ? (
                       <tr>
-                        <td colSpan="3" className="text-center">
+                        <td colSpan="4" className="text-center">
                           Carregando...
                         </td>
                       </tr>
@@ -222,6 +223,7 @@ const Cities = () => {
                       cities.map((city) => (
                         <tr key={city.id}>
                           <td>{city.name}</td>
+                          <td>{city.mayorName || "-"}</td>
                           <td>
                             {new Date(city.createdAt).toLocaleDateString('pt-BR', {
                               day: '2-digit',
@@ -252,7 +254,7 @@ const Cities = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="3" className="text-center">
+                        <td colSpan="4" className="text-center">
                           Nenhuma cidade encontrada.
                         </td>
                       </tr>

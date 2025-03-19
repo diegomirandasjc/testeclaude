@@ -26,6 +26,8 @@ public class SearchCitiesHandler : IRequestHandler<SearchCitiesQuery, SearchCiti
             {
                 Id = c.Id,
                 Name = c.Name,
+                MayorId = c.MayorId,
+                MayorName = c.Mayor?.Name,
                 CreatedAt = c.CreatedAt
             }).ToList(),
             TotalCount = result.TotalCount,

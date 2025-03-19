@@ -16,7 +16,9 @@ public class CityRepository : ICityRepository
 
     public async Task<PagedResult<City>> SearchAsync(string searchTerm, int page, int pageSize, CancellationToken cancellationToken)
     {
-        var query = _context.Cities.AsQueryable();
+        var query = _context.Cities
+            .Include(c => c.Mayor)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -43,12 +45,15 @@ public class CityRepository : ICityRepository
 
     public async Task<City> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Cities.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        return await _context.Cities
+            .Include(c => c.Mayor)
+            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
     public async Task<City> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
         return await _context.Cities
+            .Include(c => c.Mayor)
             .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
@@ -56,6 +61,10 @@ public class CityRepository : ICityRepository
     {
         _context.Cities.Update(city);
         await _context.SaveChangesAsync(cancellationToken);
-        return city;
+        
+        // Recarrega a cidade com o relacionamento do prefeito
+        return await _context.Cities
+            .Include(c => c.Mayor)
+            .FirstOrDefaultAsync(c => c.Id == city.Id, cancellationToken);
     }
 } 
