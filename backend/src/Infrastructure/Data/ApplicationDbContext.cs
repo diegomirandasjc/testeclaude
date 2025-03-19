@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public DbSet<City> Cities { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Person> Persons { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -27,6 +28,19 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
             entity.Property(e => e.CreatedAt).IsRequired();
         });
 
+        builder.Entity<Person>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.CreatedAt).IsRequired();
+        });
+
+        builder.Entity<Person>()
+            .HasIndex(p => p.Email)
+            .IsUnique();
+
+        
         builder.Entity<Customer>(entity =>
         {
             entity.HasKey(e => e.Id);

@@ -23,6 +23,8 @@ import Customers from "views/pages/Customers.js";
 import CustomerForm from "views/pages/CustomerForm.js";
 import Products from "views/pages/Products.js";
 import ProductForm from "views/pages/ProductForm.js";
+import Persons from "views/pages/persons/Persons";
+import PersonForm from "views/pages/persons/PersonForm";
 
 const routes = [
   {
@@ -32,6 +34,28 @@ const routes = [
     component: Dashboard,
     layout: "/admin",
     protected: true
+  },
+  {
+    path: "/persons",
+    name: "Pessoas",
+    icon: "ni ni-building text-info",
+    component: Persons,
+    layout: "/admin",
+    protected: true,
+    children: [
+      {
+        path: "new",
+        component: PersonForm
+      },
+      {
+        path: ":id",
+        component: PersonForm
+      },
+      {
+        path: ":id/edit",
+        component: PersonForm
+      }
+    ]
   },
   {
     path: "/cities",
