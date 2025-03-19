@@ -11,5 +11,4 @@ public interface IPersonRepository
     Task<Person> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Person> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<Person> UpdateAsync(Person person, CancellationToken cancellationToken);
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

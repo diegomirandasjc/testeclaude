@@ -66,7 +66,7 @@ const routes = [
     protected: true,
     children: [
       {
-        path: "new",
+        path: "create",
         component: CityForm
       },
       {

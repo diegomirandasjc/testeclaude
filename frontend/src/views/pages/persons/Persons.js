@@ -15,11 +15,7 @@ import {
   InputGroupText,
   Pagination,
   PaginationItem,
-  PaginationLink,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
+  PaginationLink
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import SimpleHeader from "components/Headers/SimpleHeader.js";
@@ -36,9 +32,6 @@ const Persons = () => {
     totalPages: 1,
     pageSize: 10
   });
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedPerson, setSelectedPerson] = useState(null);
-  const [deleteError, setDeleteError] = useState(null);
 
   const loadPersons = async (search = "", page = 1) => {
     try {
@@ -163,37 +156,6 @@ const Persons = () => {
     return pages;
   };
 
-  const handleDeleteClick = (person) => {
-    setSelectedPerson(person);
-    setDeleteModal(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    try {
-      setLoading(true);
-      setDeleteError(null);
-      
-      // Primeiro, verifica as dependências
-      const checkResponse = await api.get(`/api/persons/${selectedPerson.id}/dependencies`);
-      
-      if (checkResponse.data.hasDependencies) {
-        setDeleteError("Esta pessoa não pode ser excluída pois está sendo utilizada em outros registros.");
-        setDeleteModal(false);
-        return;
-      }
-
-      // Se não tem dependências, procede com a exclusão
-      await api.delete(`/api/persons/${selectedPerson.id}`);
-      setDeleteModal(false);
-      loadPersons(searchTerm, pagination.currentPage);
-    } catch (err) {
-      console.error("Erro ao excluir pessoa:", err);
-      setDeleteError(err.response?.data?.message || "Erro ao excluir pessoa");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       <SimpleHeader name="Pessoas" parentName="Gestão" />
@@ -283,17 +245,9 @@ const Persons = () => {
                             <Button
                               color="primary"
                               size="sm"
-                              className="mr-2"
                               onClick={() => navigate(`/admin/persons/${person.id}/edit`)}
                             >
                               <i className="fas fa-edit" />
-                            </Button>
-                            <Button
-                              color="danger"
-                              size="sm"
-                              onClick={() => handleDeleteClick(person)}
-                            >
-                              <i className="fas fa-trash" />
                             </Button>
                           </td>
                         </tr>
@@ -301,7 +255,7 @@ const Persons = () => {
                     ) : (
                       <tr>
                         <td colSpan="4" className="text-center">
-                          Nenhuma pessoa encontrada
+                          Nenhuma pessoa encontrada.
                         </td>
                       </tr>
                     )}
@@ -309,44 +263,17 @@ const Persons = () => {
                 </Table>
 
                 {pagination.totalPages > 1 && (
-                  <nav aria-label="Page navigation">
-                    <Pagination className="pagination justify-content-center">
+                  <div className="d-flex justify-content-center mt-4">
+                    <Pagination>
                       {renderPagination()}
                     </Pagination>
-                  </nav>
+                  </div>
                 )}
               </CardBody>
             </Card>
           </Col>
         </Row>
       </Container>
-
-      {/* Modal de Confirmação de Exclusão */}
-      <Modal isOpen={deleteModal} toggle={() => setDeleteModal(false)}>
-        <ModalHeader toggle={() => setDeleteModal(false)}>
-          Confirmar Exclusão
-        </ModalHeader>
-        <ModalBody>
-          {deleteError ? (
-            <Alert color="danger">
-              {deleteError}
-            </Alert>
-          ) : (
-            <p>
-              Tem certeza que deseja excluir a pessoa "{selectedPerson?.name}"?
-              Esta ação não pode ser desfeita.
-            </p>
-          )}
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => setDeleteModal(false)}>
-            Cancelar
-          </Button>
-          <Button color="danger" onClick={handleDeleteConfirm} disabled={loading}>
-            {loading ? "Excluindo..." : "Excluir"}
-          </Button>
-        </ModalFooter>
-      </Modal>
     </>
   );
 };

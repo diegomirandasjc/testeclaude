@@ -11,6 +11,8 @@ public static class DependencyInjection
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+ 
+        services.AddScoped<IPersonRepository, PersonRepository>(); // Adicionado
         return services;
     }
-} 
+}

@@ -21,8 +21,10 @@ const PersonForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const isEditing = !!id;
-  const isViewMode = location.pathname.includes('/persons/') && !location.pathname.includes('/edit') && !location.pathname.includes('/new');
+  const path = location.pathname.split('/');
+  const lastSegment = path[path.length - 1];
+  const isEditing = lastSegment === 'edit';
+  const isViewMode = lastSegment !== 'edit' && lastSegment !== 'new';
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

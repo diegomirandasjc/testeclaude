@@ -2,8 +2,6 @@ using Application.UseCases.Persons.CreatePerson;
 using Application.UseCases.Persons.GetPerson;
 using Application.UseCases.Persons.SearchPersons;
 using Application.UseCases.Persons.UpdatePerson;
-using Application.UseCases.Persons.CheckPersonDependencies;
-using Application.UseCases.Persons.DeletePerson;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,20 +34,6 @@ public class PersonsController : ControllerBase
         try
         {
             var response = await _mediator.Send(new GetPersonQuery { Id = id });
-            return Ok(response);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpGet("{id}/dependencies")]
-    public async Task<ActionResult<CheckPersonDependenciesResponse>> CheckDependencies(Guid id)
-    {
-        try
-        {
-            var response = await _mediator.Send(new CheckPersonDependenciesQuery { Id = id });
             return Ok(response);
         }
         catch (KeyNotFoundException)
@@ -102,24 +86,6 @@ public class PersonsController : ControllerBase
                 );
 
             return BadRequest(errors);
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<DeletePersonResponse>> Delete(Guid id)
-    {
-        try
-        {
-            var response = await _mediator.Send(new DeletePersonCommand { Id = id });
-            return Ok(response);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
         }
     }
 }

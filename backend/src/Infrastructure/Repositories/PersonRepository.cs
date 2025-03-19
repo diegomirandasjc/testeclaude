@@ -59,14 +59,4 @@ public class PersonRepository : IPersonRepository
         await _context.SaveChangesAsync(cancellationToken);
         return person;
     }
-
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
-    {
-        var person = await GetByIdAsync(id, cancellationToken);
-        if (person != null)
-        {
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-    }
 }
